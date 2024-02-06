@@ -1,6 +1,6 @@
 
 import Link from "next/link"
-
+//temp page
 export default function Page(){
     return(
         <div>
