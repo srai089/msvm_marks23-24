@@ -1,46 +1,53 @@
 "use client"
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Logout from "@/components/Logout";
+import Spiner from "@/components/Spiner";
 
 
 
 
 export default function Page() {
 const [allteachers, setAllteachers]= useState([])
-const router= useRouter()
+const [loading, setLoading]= useState(false)
+
   
   
  useEffect(()=>{
+  setLoading(true)
   const teachersList = async ()=>{
     let data= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg`);
     data= await data.json();
-   setAllteachers(data.msg)
+   setAllteachers(data.msg);
+   setLoading(false);
   };
    teachersList();
  }, [])
   
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-       <button
-       onClick={()=>router.push("/")}
-        className="absolute top-8 right-8 text-blue-500 hover:underline focus:outline-none font-semibold">
-        HOME
-      </button>
+    <div className=" flex flex-col items-center justify-center bg-gray-100">
+      
+      
       {/* New teacher registration button */}
-      <div className="mb-12 mt-20">
+      <div className="mb-4 mt-4 flex justify-between w-full px-2">
         <Link href="/regteachers">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md ">
+          <button className="bg-green-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md ">
             New Teacher Registration
           </button>
         </Link>
+        <div >
+        <Logout auth="jwt"/>
+      </div>
       </div>
       {/* Registered Teachers Table */}
       <div className="w-full mx-4 p-4 bg-white rounded-md shadow-lg overflow-x-auto">
-        <h4 className="text-2xl font-semibold mb-4">Registered Teachers</h4>
-        <table className="w-full table-auto border-collapse border border-gray-300">
+        <h4 className="text-2xl font-semibold mb-4 mt-4">Registered Teachers</h4>
+        <div className=" h-9">
+        { loading&&<Spiner/>}
+        </div>
+        <table className="w-full table-auto border-collapse border border-gray-300 mb-8">
           <thead>
             <tr>
               <th className="py-2 px-4 border">Class</th>
@@ -74,14 +81,8 @@ const router= useRouter()
           </tbody>
         </table>
       </div>
-      {/* Go to Home Page button */}
-      <div className="mt-12">
-        <Link href="/">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
-            Go to Home Page
-          </button>
-        </Link>
-      </div>
+      
+     
     </div>
   );
 }

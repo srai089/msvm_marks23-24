@@ -1,9 +1,9 @@
 "use client"
 
 // pages/admin.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import Spiner from '@/components/Spiner';
 
 
 
@@ -14,19 +14,24 @@ export default function Page() {
     user:"",
     password:""
   })
+  const [isLoading, setIsLoading]=useState(false);
+  const [message, setMessage]= useState("");
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
   const submit= async()=>{
+    setIsLoading(true);
     let resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin`,{
       method:"POST",
       body: JSON.stringify(admin)
     })
 
     resp= await resp.json();
-   
-    alert(resp.msg)
+    setIsLoading(false);
+    if(!resp.success){
+      setMessage(resp.msg)
+    }
     setAdmin({
     user:"",
     password:""
@@ -37,11 +42,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-       <button
-       onClick={()=>router.push("/")}
-        className="absolute top-8 right-8 text-blue-500 hover:underline focus:outline-none font-semibold">
-        HOME
-      </button>
+      
       <div className="bg-white p-8 shadow-md rounded-md max-w-md w-full text-center">
         <h3 className="text-2xl font-bold mb-4">Admin Login</h3>
         <label htmlFor="admin" className="block text-sm font-medium text-gray-600 mb-2">
@@ -52,7 +53,7 @@ export default function Page() {
           id="admin"
           value={admin.user}
           className="p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300 mb-4"
-          onChange={(e)=>setAdmin({...admin, user:e.target.value})}
+          onChange={(e)=>{setAdmin({...admin, user:e.target.value}); setMessage("")}}
           autoComplete="off"
         />
         <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-2">
@@ -78,12 +79,18 @@ export default function Page() {
             )}
           </span>
         </div>
+        <div className=' h-8'>
+          
+            <p className=' text-red-600 italic'>{message}</p>
+          
+        </div>
         <input
           type="button"
           value="Submit"
           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300"
           onClick={submit}
         />
+        {isLoading && <Spiner/>}
       </div>
     </div>
   );

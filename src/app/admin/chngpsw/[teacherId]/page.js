@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Spiner from "@/components/Spiner";
 
 
 const Page = ({ params }) => {
@@ -13,31 +14,36 @@ const Page = ({ params }) => {
         password: "",
         cpassword: ""
     });
+    const [loading, setLoading]= useState(false);
+    const [message, setMessage]= useState("")
 
     useEffect(() => {
+        setLoading(true);
         const teacherDetail = async (id) => {
             let data = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg/${id}`);
             data = await data.json();
-           
+           setLoading(false);
             if (data.success) {
                 setFormData({ ...formData, _id: data.msg._id, userId: data.msg.userId, className: data.msg.className })
             } else {
-                alert(data.msg)
+                setMessage(data.msg)
             }
         }
         teacherDetail(params.teacherId);
     }, [])
 
     const handleChange = (e) => {
+        setMessage("")
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
+       
         e.preventDefault();
       
         if (formData.password !== formData.cpassword) {
-            alert("Password and Confirm Password should be same");
+            setMessage("Password and Confirm Password should be same");
             return;
         }
         function isPasswordValid(password) {
@@ -53,10 +59,10 @@ const Page = ({ params }) => {
 
         if (!isPasswordValid(formData.password)) {
 
-            alert('Password should be at least 8 characters long and contain at least one uppercase letter and one number.')
+            setMessage('Password should be at least 8 characters long and contain at least one uppercase letter and one number.')
             return;
         }
-
+        setLoading(true);
        const data= {
         userId: formData.userId,
         className: formData.className,
@@ -68,17 +74,21 @@ const Page = ({ params }) => {
         });
 
         resp = await resp.json();
+        setLoading(false);
         if (resp.success) {
-            alert("Password Changed Successfuly");
+           
             router.push("/admin/admpage")
         } else {
-            alert(resp.msg)
+            setMessage(resp.msg)
         }
     };
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md w-96">
             <h2 className="text-2xl font-semibold mb-4">Change Password</h2>
-            <form onSubmit={handleSubmit}>
+            <div className=" h-20">
+            <p className="text-red-500">{message}</p>
+            </div>
+            <form onSubmit={handleSubmit} >
                 <div className="mb-4">
                     <label htmlFor="userId" className="block text-sm font-medium text-gray-600">
                         User ID
@@ -108,7 +118,7 @@ const Page = ({ params }) => {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-                        Password
+                        New Password
                     </label>
                     <input
                         type="text"
@@ -122,7 +132,7 @@ const Page = ({ params }) => {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="cpassword" className="block text-sm font-medium text-gray-600">
-                        Confirm Password
+                        Confirm New Password
                     </label>
                     <input
                         type="text"
@@ -134,6 +144,9 @@ const Page = ({ params }) => {
                         required
                     />
 
+                </div>
+                <div className="h-9">
+                    {loading&&<Spiner/>}
                 </div>
 
                 <button

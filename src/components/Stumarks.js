@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Spiner from './Spiner';
 
 const subjectList = async (classname) => {
   let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/selectsub/${classname}`);
@@ -37,6 +38,7 @@ const Stumarks = ({ _id }) => {
   });
   const router = useRouter();
   const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading]= useState(true)
 
   useEffect(() => {
     const stuData = async () => {
@@ -50,7 +52,7 @@ const Stumarks = ({ _id }) => {
       if(allSubjects){
         setSubjects(allSubjects)
       }
-      
+      setIsLoading(false);
       if(resp.success){
         Object.keys(resp.msg?.exams).map((examType) => {
           if (resp.msg.exams[examType].length === 0 || resp.msg.exams[examType].length !== subjects.length) {
@@ -93,6 +95,7 @@ const Stumarks = ({ _id }) => {
   };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const { activeExam, ...newformData } = formData;
     
@@ -101,6 +104,7 @@ const Stumarks = ({ _id }) => {
       body: JSON.stringify(newformData)
     });
     resp = await resp.json();
+    setIsLoading(false)
     if (resp.success) {
       alert(resp.msg);
       router.push(`/teacherslogin/${formData.class}`)
@@ -205,6 +209,9 @@ const Stumarks = ({ _id }) => {
         </button>
 
       </form>
+      <div>
+        {isLoading&&<Spiner/>}
+      </div>
       <button
         onClick={() => router.push(`/teacherslogin`)}
         type="submit"

@@ -26,10 +26,10 @@ export async function POST(req){
                 classTeacherName:result.classTeacherName,
                 className:result.className
             }
-           const token=  jwt.sign(payload, process.env.TECHSECRETKEY, {expiresIn:"1h"});
+           const token=  jwt.sign(payload, process.env.TECHSECRETKEY);
             return NextResponse.json({msg:"User Loged in", success:true},{
                 headers:{
-                    "Set-Cookie": `authTeacher=${token}; Path=/; HttpOnly; Secure; SameSite=Strict`,
+                    "Set-Cookie": `authTeacher=${token}; Path=/; HttpOnly; Secure;`,
                 }
             })
         }

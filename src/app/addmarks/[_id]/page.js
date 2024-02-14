@@ -1,4 +1,4 @@
-import Studentmarks from "@/components/Studentmarks";
+
 import Stumarks from "@/components/Stumarks";
 
 

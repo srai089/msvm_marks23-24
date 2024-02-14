@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Spiner from "./Spiner";
+
 
 
 const Teachersedit = ({ teacherId} ) => {
@@ -13,20 +15,21 @@ const Teachersedit = ({ teacherId} ) => {
         className:"",
         classTeacherName:""
     });
-
+    const [loading, setLoading]= useState(false);
     useEffect(()=>{
+        setLoading(true)
         const teacherDetail = async (id) => {
             let data = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg/${id}`);
             data = await data.json();
            
            setFormData(data.msg)
+           setLoading(false)
         }
         teacherDetail(teacherId);
     }, [])
 
    
-    const classOptions = ["LKG", "UKG", "Class-1", "Class-2", "Class-3", "Class-4", "Class-5", "Class-6", "Class-7", "Class-8", "Class-9", "Class-10", "Class-11", "Class-12"];
-
+   
     
 
     const handleChange = (e) => {
@@ -35,7 +38,7 @@ const Teachersedit = ({ teacherId} ) => {
     };
 
     const handleSubmit = async (e) => {
-
+        setLoading(true)
         e.preventDefault();
         let resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg/${formData._id}`, {
             method:"PUT",
@@ -43,8 +46,8 @@ const Teachersedit = ({ teacherId} ) => {
         });
 
         resp= await resp.json();
+        setLoading(false)
         if(resp.success){
-            alert("updated successfuly");
             router.push("/admin/admpage")
         }else{
             alert(resp.msg)
@@ -55,7 +58,7 @@ const Teachersedit = ({ teacherId} ) => {
 
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
-            <h2 className="text-2xl font-semibold mb-4">Teacher Registration</h2>
+            <h2 className="text-2xl font-semibold mb-4">Update Teacher Details</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="userId" className="block text-sm font-medium text-gray-600">
@@ -98,7 +101,9 @@ const Teachersedit = ({ teacherId} ) => {
                         required
                     />
                 </div>
-
+                <div className="h-9">
+                    {loading && <Spiner/>}
+                </div>
 
                 <button
                     type="submit"

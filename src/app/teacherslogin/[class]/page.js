@@ -4,35 +4,39 @@ import Link from 'next/link';
 import Markstable from '@/components/Markstable';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Spiner from '@/components/Spiner';
+import Logout from "@/components/Logout";
+
 
 
 export default function Page({ params }) {
   const [studentData, setStudentData] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg]= useState(false);
   const router = useRouter();
+
   useEffect(() => {
     // fetch student detail
     const getData = async () => {
       let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/student/${params.class}`);
       resp = await resp.json();
-      setStudentData(resp.msg)
+      setStudentData(resp.msg);
+      setIsLoading(true);
     }
+    // setTimeout(getData, 5000)
     getData();
 
-  }, [params.class])
+  }, [params.class, msg])
 
   useEffect(() => {
     // fetch subject list
     const subjectList = async (classname) => {
       let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/selectsub/${classname}`);
       resp = await resp.json();
-      
       if (resp.success) {
-        const subjectarray = resp.msg.subject.map((sub) => {
-          return sub.subname;
-        })
        
-        setSubjects(subjectarray);
+        setSubjects(resp.msg.subject);
       } else {
         alert(resp.msg)
       }
@@ -40,19 +44,22 @@ export default function Page({ params }) {
 
     subjectList(params.class)
   }, [params.class])
+
+  function handleMsg (){
+    setMsg(!msg);
+    alert("Student data deleted successfully");
+  }
+
  
 
   return (
-    <div className="container mx-auto mt-8 p-4">
-      <button
-        type="button"
-        onClick={() => router.push("/")}
-        className="text-blue-500 hover:underline focus:outline-none absolute top-8 right-8 font-semibold"
-      >
-        HOME
-      </button>
+    <div className="container mx-auto mt-8 p-4 overflow-auto">
+
       {/* Class 12 Dashboard title */}
       <h1 className="text-4xl font-bold mb-4 lg:text-center">{params.class} Dashboard</h1>
+      <div className=' absolute top-24 right-2'>
+        <Logout auth="authTeacher"/>
+      </div>
 
       <div className="lg:flex">
         {/* Left side column for buttons */}
@@ -75,15 +82,23 @@ export default function Page({ params }) {
           >
             Generate Marksheet
           </button>
+         
         </div>
 
         {/* Center content */}
         <div className="lg:w-3/4">
           {/* Table to display student details */}
+          <div>
+            <p className='text-red-600'>कृपया स्‍टूडेंटस् का रजिष्‍ट्रेशन करने से पूर्व सभी विषयों और सम्‍पूर्ण योग को ध्‍यानपूर्वक भर लें।</p>
+          </div>
+
+          {!isLoading && <Spiner className="flex justify-center align-middle" />}
+
+
 
           {studentData?.map((student) => (
             <div key={student._id}>
-              <Markstable stuData={student} subjects={subjects} />
+              <Markstable stuData={student} subjects={subjects} msgData= {handleMsg}/>
             </div>
           ))}
 

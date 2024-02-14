@@ -1,7 +1,7 @@
 "use client"
 import Marksheet from "@/components/Marksheet";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import Spiner from "@/components/Spiner";
 import html2pdf from "html2pdf.js";
 
 
@@ -10,7 +10,7 @@ import html2pdf from "html2pdf.js";
 export default function Page({ params }) {
     const [studentData, setStudentData] = useState([]);
     const [subjects, setSubjects] = useState([]);
-    const router = useRouter();
+    const [isLoading, setIsLoading]= useState(true);
     useEffect(() => {
         // fetch student detail
         const getData = async () => {
@@ -27,6 +27,7 @@ export default function Page({ params }) {
         const subjectList = async (classname) => {
             let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/selectsub/${classname}`);
             resp = await resp.json();
+            setIsLoading(false)
             if (resp.success) {
                 const subjectarray = resp.msg.subject.map((sub) => {
                     return sub.subname;
@@ -46,11 +47,7 @@ export default function Page({ params }) {
 
     return (
         <div>
-            <button
-                onClick={() => router.push("/teacherslogin")}
-                className="absolute top-8 right-8 text-blue-500 hover:underline focus:outline-none font-semibold">
-                BACK
-            </button>
+            
             <div id="pdf-container" className="mt-20">
                 {studentData?.map((student) => (
                     <div key={student._id}>
@@ -58,10 +55,12 @@ export default function Page({ params }) {
                     </div>
                 ))}
             </div>
-
+                <div>
+                    {isLoading&&<Spiner/>}
+                </div>
             <button
                 onClick={generatePDF}
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mx-4 absolute top-8 left-8"
+                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mx-4 absolute top-24 right-3"
             >
                 Print as PDF
             </button>

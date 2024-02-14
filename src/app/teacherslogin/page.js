@@ -4,6 +4,9 @@
 // TeacherLoginPage.js
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Spiner from "@/components/Spiner";
+import { classOptions } from "@/helper/classOptions";
+
 
 const TeacherLoginPage = () => {
   const router = useRouter();
@@ -13,22 +16,9 @@ const TeacherLoginPage = () => {
     password: "",
   });
 
-  const classOptions = [
-    "LKG",
-    "UKG",
-    "Class-1",
-    "Class-2",
-    "Class-3",
-    "Class-4",
-    "Class-5",
-    "Class-6",
-    "Class-7",
-    "Class-8",
-    "Class-9",
-    "Class-10",
-    "Class-11",
-    "Class-12",
-  ];
+  const [isLoading, setIsLoading] = useState(false)
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,32 +26,27 @@ const TeacherLoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault();
-    // Implement your authentication logic here
-    // ...
-   
-    let resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherslogin`, {
-      method:"POST",
-      body:JSON.stringify(loginData)
+
+    let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherslogin`, {
+      method: "POST",
+      body: JSON.stringify(loginData)
     });
-    resp= await resp.json();
+    resp = await resp.json();
+    setIsLoading(false)
+    if (!resp.success) {
+      alert("Some error! Check User Id and Password.")
+    } else {
+      router.push(`teacherslogin/${loginData.className}`)
+    }
 
-    alert(resp.msg)
-if(!resp.success){
-router.push('/teacherslogin')
-}else{
-  router.push(`teacherslogin/${loginData.className}`)
-}
 
-    
   };
 
-  const handleGoHome = () => {
-    router.push("/");
-  };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md w-80">
       <h2 className="text-2xl font-semibold mb-4">Teacher Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -121,15 +106,12 @@ router.push('/teacherslogin')
           >
             Login
           </button>
-          <button
-            type="button"
-            onClick={handleGoHome}
-            className="text-blue-500 hover:underline focus:outline-none"
-          >
-            Home
-          </button>
+
         </div>
       </form>
+      <div>
+        {isLoading && <Spiner />}
+      </div>
     </div>
   );
 };

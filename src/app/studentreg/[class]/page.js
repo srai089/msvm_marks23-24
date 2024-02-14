@@ -1,16 +1,20 @@
 "use client"
 import { useState } from "react";
-import { classOptions } from "@/helper/classOptions";
+import Spiner from "@/components/Spiner";
+import { useRouter } from "next/navigation";
 
 export default function Page({params}) {
+    const router= useRouter();
     const [formData, setFormData] = useState({
         firstName: "",
         fatherName: "",
         rollNumber: "",
         class:params.class
     });
-
+    const [isLoading, setIsLoading]= useState(false);
+    const [message, setMessage]=useState("");
     const handleChange = (e) => {
+        setMessage("")
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -20,20 +24,22 @@ export default function Page({params}) {
 
     const handleSubmit =async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const data= JSON.stringify(formData);
         const resp= await fetch (`${process.env.NEXT_PUBLIC_HOST}/api/student`,{
             method:"POST",
             body:data
         })
    const result= await resp.json();
+   setIsLoading(false);
    if(result.success){
-    alert(result.msg);
+    setMessage(result.msg)
     setFormData({...formData, 
         firstName: "",
         fatherName: "",
         rollNumber: "" })
    }else{
-    alert(result.msg)
+    setMessage(result.msg)
    }
       
     };
@@ -81,14 +87,30 @@ export default function Page({params}) {
                     </label>
 
                 </div>
+                <div className="mb-4 h-4">
+                    <p className="text-orange-600 font-bold italic">{message}</p>
+                    
+                </div>
 
+                <div className="flex justify-between">
                 <button
                     type="submit"
                     className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
                 >
                     Submit
                 </button>
+                <button
+                    onClick={()=>router.push("/teacherslogin")}
+                    className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 px-5"
+                >
+                    Back
+                </button>
+                </div>
+               
             </form>
+            <div>
+               {isLoading&&<Spiner/>} 
+            </div>
         </div>
 
     )

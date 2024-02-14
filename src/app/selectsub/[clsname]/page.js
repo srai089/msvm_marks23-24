@@ -1,20 +1,23 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Spiner from '@/components/Spiner';
+import { allSubList } from '@/helper/classOptions';
 
 const ExamMarksEntry = ({ params }) => {
     const classname = params.clsname;
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [examMarks, setExamMarks] = useState([]);
     const [success, setSuccess] = useState(false);
-    const [classId, setClassId]= useState()
+    const [classId, setClassId]= useState();
+    const [isLoading, setIsLoading]= useState(true);
     const router = useRouter();
 
     useEffect(() => {
         const getSubject = async () => {
             let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/selectsub/${classname}`);
             resp = await resp.json();
-           
+            setIsLoading(false)
             if (resp.success) {
                 setExamMarks(resp.msg.subject);
                 setSuccess(true);
@@ -28,7 +31,7 @@ const ExamMarksEntry = ({ params }) => {
     const handleSubjectSelect = (subject) => {
         if (!selectedSubjects.includes(subject)) {
             setSelectedSubjects([...selectedSubjects, subject]);
-            setExamMarks([...examMarks, { subname: subject, PA1: 0, PA2: 0, PA3: 0, halfYearly: 0, annual: 0 }]);
+            setExamMarks([...examMarks, { subname: subject, pa1: 0, pa2: 0, pa3: 0, halfYearly: 0, annual: 0 }]);
         }
     };
 
@@ -51,6 +54,7 @@ const ExamMarksEntry = ({ params }) => {
     };
 
     const handleSubmit = async () => {
+        setIsLoading(true);
         const data = {
             classname,
             subject: examMarks
@@ -61,17 +65,16 @@ const ExamMarksEntry = ({ params }) => {
             body: JSON.stringify(data)
         });
         const resp = await subjectdata.json();
-
+        setIsLoading(false)
         if (resp.success) {
-            alert("Submited successfully");
             router.push("/teacherslogin")
         } else {
             alert("some error")
-            router.push("/teacherslogin")
         }
     }
 
     const handleUpdate = async () => {
+        setIsLoading(true);
         const data = {
             classname,
             subject: examMarks
@@ -82,22 +85,22 @@ const ExamMarksEntry = ({ params }) => {
             body: JSON.stringify(data)
         });
         const resp = await subjectdata.json();
-
+        setIsLoading(false)
         if (resp.success) {
-            alert("Updated successfully");
+           
             router.push("/teacherslogin")
         } else {
             alert("some error")
-            router.push("/teacherslogin")
+         
         }
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 overflow-y-auto">
             <div className="mb-4">
                 <h2 className="text-2xl font-bold mb-2">Select Subjects:</h2>
                 <ul className="flex flex-wrap">
-                    {['Hindi', 'English', 'Sanskrit', 'Computer', 'Maths', 'Chemistry'].map((subject) => (
+                    {allSubList.map((subject) => (
                         <li
                             key={subject}
                             className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded mr-2 mb-2"
@@ -107,6 +110,9 @@ const ExamMarksEntry = ({ params }) => {
                         </li>
                     ))}
                 </ul>
+            </div>
+            <div>
+                {isLoading && <Spiner/>}
             </div>
 
             <div>
@@ -130,24 +136,24 @@ const ExamMarksEntry = ({ params }) => {
                                 <td className="border px-4 py-2">
                                     <input
                                         type="number"
-                                        value={item.PA1}
-                                        onChange={(e) => handleMarksEntry(item.subname, 'PA1', e.target.value)}
+                                        value={item.pa1}
+                                        onChange={(e) => handleMarksEntry(item.subname, 'pa1', e.target.value)}
                                         className="w-full"
                                     />
                                 </td>
                                 <td className="border px-4 py-2">
                                     <input
                                         type="number"
-                                        value={item.PA2}
-                                        onChange={(e) => handleMarksEntry(item.subname, 'PA2', e.target.value)}
+                                        value={item.pa2}
+                                        onChange={(e) => handleMarksEntry(item.subname, 'pa2', e.target.value)}
                                         className="w-full"
                                     />
                                 </td>
                                 <td className="border px-4 py-2">
                                     <input
                                         type="number"
-                                        value={item.PA3}
-                                        onChange={(e) => handleMarksEntry(item.subname, 'PA3', e.target.value)}
+                                        value={item.pa3}
+                                        onChange={(e) => handleMarksEntry(item.subname, 'pa3', e.target.value)}
                                         className="w-full"
                                     />
                                 </td>

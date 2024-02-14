@@ -30,3 +30,16 @@ return NextResponse.json({msg:resp, success:true})
         return NextResponse.json({msg:"Some error occured", success:false})
     }
 }
+
+export async function DELETE(req, content){
+    const _id= content.params._id;
+    try {
+        await mongoose.connect(process.env.DB);
+        const resp=await Student.findByIdAndDelete(_id);
+        
+        return NextResponse.json({msg:"Student Details Deleted", success:true})
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({msg:"Some error occured", success:false})
+    }
+}

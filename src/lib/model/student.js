@@ -39,7 +39,7 @@ const studentSchema = new mongoose.Schema({
           {
             subject: {
               type: String,
-              enum: ['Hindi', 'English', 'Science', 'Social Science', 'Maths'],
+              
               required: true,
             },
             score: {
@@ -55,7 +55,7 @@ const studentSchema = new mongoose.Schema({
           {
             subject: {
               type: String,
-              enum: ['Hindi', 'English', 'Science', 'Social Science', 'Maths'],
+              
               required: true,
             },
             score: {
@@ -71,7 +71,7 @@ const studentSchema = new mongoose.Schema({
         {
           subject: {
             type: String,
-            enum: ['Hindi', 'English', 'Science', 'Social Science', 'Maths'],
+            
             required: true,
           },
           score: {
@@ -87,7 +87,7 @@ const studentSchema = new mongoose.Schema({
         {
           subject: {
             type: String,
-            enum: ['Hindi', 'English', 'Science', 'Social Science', 'Maths'],
+           
             required: true,
           },
           score: {

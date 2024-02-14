@@ -13,15 +13,15 @@ const subjectSchema = mongoose.Schema({
                     type: String,
                     required: true
                 },
-                PA1: {
+                pa1: {
                     type: Number,
                     default: 0,
                 },
-                PA2: {
+                pa2: {
                     type: Number,
                     default: 0,
                 },
-                PA3: {
+                pa3: {
                     type: Number,
                     default: 0,
                 },

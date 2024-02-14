@@ -5,7 +5,7 @@ import jwt  from "jsonwebtoken";
 export async function POST(req){
 
     const adminData= await req.json();
-    if(adminData.user!=="admin" || adminData.password!=="123"){
+    if(adminData.user!=="admin" || adminData.password!==process.env.ADMIN_PASS){
         return NextResponse.json({msg:"Please Input Valid Detail", success:false})
     }
     
