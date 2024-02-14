@@ -106,7 +106,6 @@ const Stumarks = ({ _id }) => {
     resp = await resp.json();
     setIsLoading(false)
     if (resp.success) {
-      alert(resp.msg);
       router.push(`/teacherslogin/${formData.class}`)
     } else {
       alert("some error")
