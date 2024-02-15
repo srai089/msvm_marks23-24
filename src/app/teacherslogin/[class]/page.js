@@ -19,10 +19,10 @@ export default function Page({ params }) {
   useEffect(() => {
     // fetch student detail
     const getData = async () => {
+      setIsLoading(true);
       let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/student/${params.class}`);
       resp = await resp.json();
       setStudentData(resp.msg);
-      setIsLoading(true);
     }
     // setTimeout(getData, 5000)
     getData();
@@ -32,6 +32,7 @@ export default function Page({ params }) {
   useEffect(() => {
     // fetch subject list
     const subjectList = async (classname) => {
+      setIsLoading(true)
       let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/selectsub/${classname}`);
       resp = await resp.json();
       if (resp.success) {

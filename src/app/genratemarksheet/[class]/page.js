@@ -29,10 +29,7 @@ export default function Page({ params }) {
             resp = await resp.json();
             setIsLoading(false)
             if (resp.success) {
-                const subjectarray = resp.msg.subject.map((sub) => {
-                    return sub.subname;
-                })
-                setSubjects(subjectarray);
+                setSubjects(resp.msg.subject);
             } else {
                 alert(resp.msg)
             }

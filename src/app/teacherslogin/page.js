@@ -16,11 +16,13 @@ const TeacherLoginPage = () => {
     password: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg]= useState("")
 
 
 
   const handleChange = (e) => {
+    setMsg("")
     const { name, value } = e.target;
     setLoginData((prevData) => ({ ...prevData, [name]: value }));
   };
@@ -36,7 +38,7 @@ const TeacherLoginPage = () => {
     resp = await resp.json();
     setIsLoading(false)
     if (!resp.success) {
-      alert("Some error! Check User Id and Password.")
+      setMsg("Some error! Check User Id and Password.")
     } else {
       router.push(`teacherslogin/${loginData.className}`)
     }
@@ -48,6 +50,9 @@ const TeacherLoginPage = () => {
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md w-80">
       <h2 className="text-2xl font-semibold mb-4">Teacher Login</h2>
+      <div className="h-8 mb-3">
+        <p className="text-red-500 text-sm font-semibold italic">{msg}</p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="userId" className="block text-sm font-medium text-gray-600">
@@ -102,7 +107,7 @@ const TeacherLoginPage = () => {
         <div className="flex justify-between items-center mb-4">
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mt-4"
           >
             Login
           </button>

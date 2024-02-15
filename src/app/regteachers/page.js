@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { classOptions } from "@/helper/classOptions";
+import Spiner from "@/components/Spiner";
 
 const TeacherRegistrationForm = () => {
   const router= useRouter();
@@ -14,9 +15,13 @@ const TeacherRegistrationForm = () => {
     confirmPassword: "",
   });
 
+const [msg, setMsg]=useState("");
+const [loading, setLoading]= useState(false)
+
   
 
   const handleChange = (e) => {
+    setMsg("")
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
@@ -36,33 +41,34 @@ const TeacherRegistrationForm = () => {
     }
     const { userId, password } = formData;
     if (userId && userId.includes(' ')) {
-      alert("User ID should not contain spaces.")
+      setMsg("User ID should not contain spaces.")
       return;
     };
     if (userId.length < 8) {
-      alert('User ID should be at least 8 characters long.')
+      setMsg('User ID should be at least 8 characters long.')
       return;
     };
 
     if (!isPasswordValid(password)) {
 
-      alert('Password should be at least 8 characters long and contain at least one uppercase letter and one number.')
+      setMsg('Password should be at least 8 characters long and contain at least one uppercase letter and one number.')
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Password and confirm password should be same");
+      setMsg("Password and confirm password should be same");
       return;
     }
     // logic to handle form submission here
+    setLoading(true)
     const regDetail= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg`,{
       method:"POST",
       body:JSON.stringify(formData)
     });
     const resp= await regDetail.json();
-  
+  setLoading(false)
     if(resp.success){
-      alert(resp.msg);
+      setMsg(resp.msg);
       setFormData({
         userId: "",
         className: "",
@@ -71,7 +77,7 @@ const TeacherRegistrationForm = () => {
         confirmPassword: "",
       })
     }else{
-      alert(resp.msg)
+      setMsg(resp.msg)
     }
     
     
@@ -80,6 +86,9 @@ const TeacherRegistrationForm = () => {
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Teacher Registration</h2>
+      <div className="h-8">
+        <p className=" font-semibold italic text-sm text-red-500">{msg}</p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="userId" className="block text-sm font-medium text-gray-600">
@@ -156,6 +165,9 @@ const TeacherRegistrationForm = () => {
             className="mt-1 p-2 w-full border rounded-md"
             required
           />
+        </div>
+        <div className="h-8">
+          {loading&&<Spiner/>}
         </div>
         <button
           type="submit"
