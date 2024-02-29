@@ -8,21 +8,25 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'MSVM Examination Results for year 23-24',
-  description: 'Discover the results of MSVM Examination for the year 23-24 showcasing student achievements and performance.',
+  description: 'Discover the results of MSVM Examination Result for the year 23-24 showcasing student achievements and performance.',
 }
 
 export default function RootLayout({ children }) {
   return (
-    
+
     <html lang="en" >
-      <body className={inter.className }
-      style={{display:"flex", flexDirection:"column",height:"100vh"}}
+      <head>
+      <meta name="google-site-verification" content="_7zkENXah2tsXU2bhzymNdJYiOW7q6fSE0fJ9dDNt94" />
+      </head>
+
+      <body className={inter.className}
+        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
       >
-      <Navbar/>
+        <Navbar />
         {children}
-        <Footer/>
-        </body>
+        <Footer />
+      </body>
     </html>
-   
+
   )
 }
