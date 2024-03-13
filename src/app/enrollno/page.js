@@ -45,7 +45,7 @@ export default function Page() {
         if (resp.success) {
             response.class = resp.msg.class;
             const list = await subjectList(resp.msg.class);
-            console.log("list", list);
+           
             setSubjects(list)
             setResponse(resp.msg)
             setStatus(resp.success)

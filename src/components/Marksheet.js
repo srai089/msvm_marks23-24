@@ -8,8 +8,8 @@ import { allExams } from "@/helper/classOptions";
 const Marksheet = ({ stuData, subjects }) => {
 
     const dummyData = stuData;
-    console.log("dummydata", dummyData);
-    console.log("subjects", subjects);
+  
+  
     const rollNumber = stuData.rollNumber;
 
     let totalObtainedMarks = 0; // Initialize total obtained marks
@@ -25,10 +25,9 @@ const Marksheet = ({ stuData, subjects }) => {
         // Iterate through exam types
         allExams.forEach((examType) => {
             // Find the subject data for the current exam type
-            console.log("dummyData.exams[examType]", dummyData.exams[examType]);
-            console.log("subject.subname", subject);
+           
             const subjectData = dummyData.exams[examType].find((item) => item.subject === subject.subname);
-            console.log("subjectData", subjectData);
+          
             // If subject data exists, update the totals
             if (subjectData) {
                 totalObtainedMarks += subjectData.score || 0; // Add obtained marks to total obtained marks
@@ -72,7 +71,7 @@ const Marksheet = ({ stuData, subjects }) => {
                 </thead>
                 <tbody>
                     {subjects.map((subject) => (
-                        <tr key={subject}>
+                        <tr key={subject.subname}>
                             <td className="border border-gray-500 py-2 px-4">{subject.subname}</td>
                             {allExams.map((examType) => {
                                 return <td key={examType} className="border border-gray-500 py-2 px-4">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logout from "@/components/Logout";
 import Spiner from "@/components/Spiner";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 
 
@@ -12,18 +13,38 @@ export default function Page() {
 const [allteachers, setAllteachers]= useState([])
 const [loading, setLoading]= useState(false)
 
+const teachersList = async () => {
+  let data = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg`);
+  data = await data.json();
+  setAllteachers(data.msg);
+  setLoading(false);
+};
   
   
  useEffect(()=>{
   setLoading(true)
-  const teachersList = async ()=>{
-    let data= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg`);
-    data= await data.json();
-   setAllteachers(data.msg);
-   setLoading(false);
-  };
+  // const teachersList = async ()=>{
+  //   let data= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg`);
+  //   data= await data.json();
+  //  setAllteachers(data.msg);
+  //  setLoading(false);
+  // };
    teachersList();
  }, [])
+
+ const handleDelete= async (id)=>{
+  let resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/teacherreg/${id}`,{
+    method:"DELETE"
+  });
+  resp= await resp.json();
+  if(resp.success){
+    alert("User deleted");
+    setLoading(true);
+    await teachersList();
+  }else{
+    alert(resp.msg)
+  }
+}
   
 
   return (
@@ -76,6 +97,14 @@ const [loading, setLoading]= useState(false)
                     </button>
                   </Link>
                   </td>
+                  <td className="py-2 px-4 border">
+                  <button
+                    onClick={() => handleDelete(teacher._id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

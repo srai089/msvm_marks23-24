@@ -38,4 +38,21 @@ export async function GET(req, content){
         console.log("teacher put error part", error);
         return NextResponse.json({msg:"Some error occured", success:false})
     }
+
+}
+
+
+export async function DELETE (req, content){
+    await mongoose.connect(process.env.DB).then(() => {
+        console.log("db Connected");
+    }).catch((e) => console.log("db connection error part", e));
+    const _id= content.params.teacherid;
+    try {
+        const resp = await Teacher.findByIdAndDelete(_id)
+        return NextResponse.json({msg:resp, success:true})       
+    } catch (error) {
+        console.log("teacher put error part", error);
+        return NextResponse.json({msg:"Some error occured", success:false})
+    }
+
 }
