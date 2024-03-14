@@ -45,7 +45,7 @@ const Marksheet = ({ stuData, subjects }) => {
     return (
         <div className="container mx-auto p-4 bg-white shadow-md mt-8 relative h-[1090px] overflow-x-auto overflow-y-hidden ">
             <Background />
-            <h1 className="text-3xl font-bold mb-4 text-center">Madhav Saraswati Viddya Mandir</h1>
+            <h1 className="text-3xl font-bold mb-4 text-center">Madhav Saraswati Vidya Mandir</h1>
             <h4 className="text-xl font-bold mb-4 text-center">Prakash Nagar, Ghazipur</h4>
 
             <div className="grid grid-cols-2 gap-4 mb-8 mt-14">
