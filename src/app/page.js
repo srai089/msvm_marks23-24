@@ -17,8 +17,12 @@ export default function Home() {
     
       </div>
       <div className="mt-12">
-        <h3 className="text-xl font-bold text-gray-800 p-0  text-center ">Madhav Saraswati Vidya Mandir</h3>
-        <h4 className="text-lg font-bold text-gray-800 p-0  text-center ">Prakash Nagar, Ghazipur</h4>
+        {/* <h3 className="text-xl font-bold text-gray-800 p-0  text-center ">Madhav Saraswati Vidya Mandir</h3>
+        <h4 className="text-lg font-bold text-gray-800 p-0  text-center ">Prakash Nagar, Ghazipur</h4> */}
+        {/* or */}
+        <h1 className="text-xl font-bold text-center">Madhav Saraswati Vidya Mandir</h1>
+            <h4 className="text-xl font-semibold mb-1 text-center text-orange-700">Senior Secondary School</h4>
+            <h4 className=" text-sm font-bold mb-4 text-center">Prakash Nagar, Ghazipur</h4>
         <h1 className="text-3xl font-bold text-red-600 p-0  text-center ">
           Examination result Year 2023-24
         </h1>

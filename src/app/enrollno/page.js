@@ -75,7 +75,8 @@ export default function Page() {
                 Year: 2023-24
             </h1>
             <h1 className="text-2xl font-bold text-center">Madhav Saraswati Vidya Mandir</h1>
-            <h4 className="text-xl font-bold mb-4 text-center">Prakash Nagar, Ghazipur</h4>
+            <h4 className="text-2xl font-semibold mb-1 text-center text-orange-700">Senior Secondary School</h4>
+            <h4 className=" text-lg font-bold mb-4 text-center">Prakash Nagar, Ghazipur</h4>
             <div className=" w-80 text-center mx-auto  h-8">
                     {isLoading && <Spiner />}
                 </div>

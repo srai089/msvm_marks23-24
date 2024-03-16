@@ -70,7 +70,7 @@ export async function middleware(req) {
 
         } catch (error) {
             console.log("error");
-            return NextResponse.redirect(new URL(`/teacherslogin`, req.url))
+            return NextResponse.redirect(new URL(`/`, req.url))
 
         }
 
@@ -107,7 +107,7 @@ export async function middleware(req) {
 
         } catch (error) {
             console.log("error");
-            return NextResponse.redirect(new URL(`/admin`, req.url))
+            return NextResponse.redirect(new URL(`/`, req.url))
         }
 
     }

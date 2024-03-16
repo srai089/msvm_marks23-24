@@ -45,7 +45,7 @@ export default function Page({ params }) {
     return (
         <div>
             
-            <div id="pdf-container" className="mt-20">
+            <div id="pdf-container" className="mt-5">
                 {studentData?.map((student) => (
                     <div key={student._id}>
                         <Marksheet stuData={student} subjects={subjects} />
