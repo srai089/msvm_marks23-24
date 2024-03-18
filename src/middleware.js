@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 
 export async function middleware(req) {
-
+    
     // Return public url 
     const publicUrl = ["/api/marksheet", "/api/teacherslogin", "/api/admin"];
     if (publicUrl.includes(req.nextUrl.pathname)) {
@@ -70,7 +70,8 @@ export async function middleware(req) {
 
         } catch (error) {
             console.log("error");
-            return NextResponse.redirect(new URL(`/`, req.url))
+           
+            return NextResponse.redirect(new URL(`/logout`, req.url))
 
         }
 
@@ -107,7 +108,7 @@ export async function middleware(req) {
 
         } catch (error) {
             console.log("error");
-            return NextResponse.redirect(new URL(`/`, req.url))
+            return NextResponse.redirect(new URL(`/logout`, req.url))
         }
 
     }

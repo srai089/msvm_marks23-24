@@ -3,12 +3,14 @@ import { useState } from "react";
 import Marksheet from "@/components/Marksheet";
 import { useRouter } from "next/navigation";
 import Spiner from "@/components/Spiner";
+import FindByName from "@/components/FindByName";
+
 
 
 
 
 export default function Page() {
-    const [enroll, setEnroll] = useState("");
+    const [enroll, setEnroll] = useState({ enr: "" });
     const [response, setResponse] = useState({})
     const [status, setStatus] = useState(false)
     const [subjects, setSubjects] = useState([]);
@@ -32,11 +34,15 @@ export default function Page() {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
+
+
         setIsLoading(true);
         let resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/marksheet`, {
             method: "POST",
-            body: JSON.stringify({ rollNumber: enroll })
+            body: JSON.stringify({ rollNumber: enroll.enr })
         });
 
         resp = await resp.json()
@@ -45,19 +51,26 @@ export default function Page() {
         if (resp.success) {
             response.class = resp.msg.class;
             const list = await subjectList(resp.msg.class);
-           
+
             setSubjects(list)
             setResponse(resp.msg)
             setStatus(resp.success)
             setIsLoading(false);
+            setEnroll({enr:""});
         } else {
 
             setMsg("Enroll No not found");
             setIsLoading(false);
 
         }
-
     }
+
+    const callFindByName = (enrollNo) => {
+        console.log("Enroll no in", enrollNo);
+        enroll.enr = enrollNo; 
+        handleSubmit();
+    }
+
 
     if (status && (subjects?.length == 0 || !subjects)) {
 
@@ -78,8 +91,8 @@ export default function Page() {
             <h4 className="text-2xl font-semibold mb-1 text-center text-orange-700">Senior Secondary School</h4>
             <h4 className=" text-lg font-bold mb-4 text-center">Prakash Nagar, Ghazipur</h4>
             <div className=" w-80 text-center mx-auto  h-8">
-                    {isLoading && <Spiner />}
-                </div>
+                {isLoading && <Spiner />}
+            </div>
 
             <form onSubmit={handleSubmit} className="bg-white shadow-md  rounded px-8 pt-6 pb-8 mb-4 w-96 mx-auto h-[250px] mt-2">
                 <div className="mb-8 ">
@@ -92,12 +105,12 @@ export default function Page() {
                     <input
                         id="enroll"
                         name="enroll"
-                        value={enroll}
-                        onChange={(e) => {setEnroll(e.target.value); setMsg("")}}
+                        value={enroll.enr}
+                        onChange={(e) => { setEnroll({ enr: e.target.value }); setMsg("") }}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
-               
+
                 <div className="flex items-center justify-between">
 
                     <button
@@ -109,6 +122,11 @@ export default function Page() {
 
                 </div>
             </form>
+
+            {/* Code for "search marksheet by name " */}
+            <div className=" w-96 mx-auto">
+            <FindByName funCall={callFindByName} />
+            </div>
 
             <div className=" w-24 mx-auto mt-6 mb-4">
 

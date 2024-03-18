@@ -8,4 +8,4 @@ export const allSubList= ['Hindi', 'English', "Biology", "Social Science","Scien
     'Physical Education practical/viva'
 ];
 
-export const allExams= ['pa1', 'pa2', 'pa3', 'halfYearly', 'annual'];
+export const allExams= ['pa1', 'pa2' , 'pa3' , 'halfYearly' , 'annual'];

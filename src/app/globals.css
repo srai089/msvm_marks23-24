@@ -23,5 +23,41 @@
     .animate-color-change {
       animation: color-change 2s infinite; /* 2 seconds animation, repeat indefinitely */
     }
+  
+
+    @media only screen and (max-width: 790px) {
+     .totalMarks{
+      margin-left:1px;
+      margin-right:1px;
+      padding-left:1px;
+      padding-right: 1px;
+      font:bold;
+      font-size: small;
+     }
+    }
+.studentSearch{
+  width: 90vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+    @media only screen and (max-width: 600px) {
+      .hideDiv {
+        display:none;
+      }
+      .bgmsvm{
+        display:none;
+      }
+      .bglogo{
+        width: 230px;
+        height: 230px;
+        top:100px;
+      }
+      .studentSearch{
+        display: flex;
+        flex-direction: column;
+      }
+    }
  
   
