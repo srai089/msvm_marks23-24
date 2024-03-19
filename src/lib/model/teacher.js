@@ -32,6 +32,8 @@ const teacherSchema = new mongoose.Schema({
       "Class-9",
       "Class-10",
       "Class-11",
+      "Class-11-COMM",
+      "Class-11-BIO",
       "Class-12",
     ],
   },
